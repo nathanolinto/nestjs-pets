@@ -1,0 +1,62 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateCatInput } from './dto/create-cat.input';
+import { UpdateCatInput } from './dto/update-cat.input';
+import { Cat } from './entities/cat.entity';
+
+@Injectable()
+export class CatService {
+  private cats: Cat[] = [
+    {
+      name: 'Ventus',
+      age: 4,
+      breed: 'Russian Blue',
+      id: 1,
+    },
+    {
+      name: 'Terra',
+      age: 5,
+      breed: 'Siberian',
+      id: 2,
+    },
+    {
+      name: 'Aqua',
+      age: 3,
+      breed: 'Maine Coon',
+      id: 3,
+    },
+  ];
+
+  create(createCatInput: CreateCatInput) {
+    const id = this.cats.length + 1;
+    this.cats.push({ id, ...createCatInput });
+    return this.cats[id - 1];
+  }
+
+  findAll() {
+    return this.cats;
+  }
+
+  findOne(id: number) {
+    const foundCat = this.cats.find((cat) => cat.id === id);
+    if (!foundCat) {
+      throw new BadRequestException(`No cat with id ${id} found`);
+    }
+    return foundCat;
+  }
+
+  update(id: number, updateCatInput: UpdateCatInput) {
+    const findIndex = this.cats.findIndex((cat) => cat.id === id);
+    if (findIndex < 0) {
+      throw new BadRequestException(`No cat with id ${id} found`);
+    }
+    this.cats[findIndex] = updateCatInput;
+  }
+
+  remove(id: number) {
+    const findIndex = this.cats.findIndex((cat) => cat.id === id);
+    if (findIndex < 0) {
+      throw new BadRequestException(`No cat with id ${id} found`);
+    }
+    this.cats.splice(findIndex, 1);
+  }
+}
