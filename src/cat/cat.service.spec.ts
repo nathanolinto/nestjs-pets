@@ -74,4 +74,36 @@ describe('CatService', () => {
       expect(noIdCall).toThrowError('No cat with id 410 found');
     });
   });
+
+  describe('update', () => {
+    it('should update a cat to the array', () => {
+      const updateCatData = {
+        name: 'Plutão',
+        age: 10,
+        breed: 'Russian Red',
+        id: 1,
+      };
+      const updatedCat = service.update(updateCatData.id, updateCatData);
+      expect(updatedCat).toEqual({
+        ...updateCatData,
+      });
+    });
+    it('should throw an error', () => {
+      const noIdCall = () => service.findOne(410);
+      expect(noIdCall).toThrowError(BadRequestException);
+      expect(noIdCall).toThrowError('No cat with id 410 found');
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a cat to the array', () => {
+      const createdCat = service.remove(1);
+      expect(createdCat).toEqual(1);
+    });
+    it('should throw an error', () => {
+      const noIdCall = () => service.findOne(410);
+      expect(noIdCall).toThrowError(BadRequestException);
+      expect(noIdCall).toThrowError('No cat with id 410 found');
+    });
+  });
 });
