@@ -50,6 +50,7 @@ export class CatService {
       throw new BadRequestException(`No cat with id ${id} found`);
     }
     this.cats[findIndex] = updateCatInput;
+    return this.cats[findIndex];
   }
 
   remove(id: number) {
@@ -57,6 +58,7 @@ export class CatService {
     if (findIndex < 0) {
       throw new BadRequestException(`No cat with id ${id} found`);
     }
-    this.cats.splice(findIndex, 1);
+    const removedPet = this.cats.splice(findIndex, 1);
+    return removedPet.length;
   }
 }
