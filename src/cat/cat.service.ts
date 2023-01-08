@@ -26,17 +26,17 @@ export class CatService {
     },
   ];
 
-  create(createCatInput: CreateCatInput) {
+  create(createCatInput: CreateCatInput): Cat {
     const id = this.cats.length + 1;
     this.cats.push({ id, ...createCatInput });
     return this.cats[id - 1];
   }
 
-  findAll() {
+  findAll(): Cat[] {
     return this.cats;
   }
 
-  findOne(id: number) {
+  findOne(id: number): Cat {
     const foundCat = this.cats.find((cat) => cat.id === id);
     if (!foundCat) {
       throw new BadRequestException(`No cat with id ${id} found`);
@@ -44,7 +44,7 @@ export class CatService {
     return foundCat;
   }
 
-  update(id: number, updateCatInput: UpdateCatInput) {
+  update(id: number, updateCatInput: UpdateCatInput): Cat {
     const findIndex = this.cats.findIndex((cat) => cat.id === id);
     if (findIndex < 0) {
       throw new BadRequestException(`No cat with id ${id} found`);
@@ -53,7 +53,7 @@ export class CatService {
     return this.cats[findIndex];
   }
 
-  remove(id: number) {
+  remove(id: number): number {
     const findIndex = this.cats.findIndex((cat) => cat.id === id);
     if (findIndex < 0) {
       throw new BadRequestException(`No cat with id ${id} found`);
