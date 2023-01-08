@@ -1,14 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CatResolver } from './cat.resolver';
 import { CatService } from './cat.service';
-import { CreateCatInput } from './dto/create-cat.input';
 
 const catServiceMock = {
-  create: jest.fn((createCatInput: CreateCatInput) => ({
+  create: jest.fn().mockReturnValue({
+    name: 'Bad Cat',
+    breed: 'Sphinx',
+    age: 1390,
     id: 10,
-    ...createCatInput,
-  })),
-  findAll: jest.fn(() => [
+  }),
+  findAll: jest.fn().mockReturnValue([
     {
       age: 3,
       name: 'Ventus',
@@ -16,12 +17,16 @@ const catServiceMock = {
       id: 1,
     },
   ]),
-  findOne: jest.fn((id: number) => ({
+  findOne: jest.fn().mockReturnValue({
     age: 3,
     name: 'Test Cat',
     breed: 'Test Breed',
-    id,
-  })),
+    id: 1,
+  }),
+  update: jest
+    .fn()
+    .mockReturnValue({ name: 'Plutão', breed: 'Sphinx', age: 5, id: 1 }),
+  remove: jest.fn().mockReturnValue(1),
 };
 
 describe('CatResolver', () => {
@@ -74,12 +79,36 @@ describe('CatResolver', () => {
 
   describe('getCat', () => {
     it('should get one cat', () => {
-      expect(resolver.getCat(500)).toEqual({
+      expect(resolver.getCat(1)).toEqual({
+        age: 3,
         name: 'Test Cat',
         breed: 'Test Breed',
-        age: 3,
-        id: 500,
+        id: 1,
       });
+    });
+  });
+
+  describe('updateCat', () => {
+    it('should update a cat', () => {
+      expect(
+        resolver.updateCat({
+          name: 'Plutão',
+          breed: 'Sphinx',
+          age: 5,
+          id: 1,
+        }),
+      ).toEqual({
+        name: 'Plutão',
+        breed: 'Sphinx',
+        age: 5,
+        id: 1,
+      });
+    });
+  });
+
+  describe('removeCat', () => {
+    it('should remove a cat', () => {
+      expect(resolver.removeCat(1)).toBe(1);
     });
   });
 });
