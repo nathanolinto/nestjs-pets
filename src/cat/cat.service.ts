@@ -53,12 +53,12 @@ export class CatService {
     return this.cats[findIndex];
   }
 
-  remove(id: number): number {
+  remove(id: number): Cat {
     const findIndex = this.cats.findIndex((cat) => cat.id === id);
     if (findIndex < 0) {
       throw new BadRequestException(`No cat with id ${id} found`);
     }
     const removedPet = this.cats.splice(findIndex, 1);
-    return removedPet.length;
+    return removedPet[0];
   }
 }
